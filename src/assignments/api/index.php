@@ -40,27 +40,32 @@
 // ============================================================================
 
 // TODO: Set Content-Type header to application/json
-
+header('Content-Type: application/json; charset=utf-8')
 
 // TODO: Set CORS headers to allow cross-origin requests
-
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
 
 // TODO: Handle preflight OPTIONS request
-
-
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(204);
+    exit;
+}
 
 // ============================================================================
 // DATABASE CONNECTION
 // ============================================================================
 
 // TODO: Include the database connection class
-
+require_once 'Database.php';
 
 // TODO: Create database connection
-
+$database = new Database();
+$db = $database->getConnection();
 
 // TODO: Set PDO to throw exceptions on errors
-
+$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 
 // ============================================================================
@@ -68,12 +73,17 @@
 // ============================================================================
 
 // TODO: Get the HTTP request method
-
+$method = $_SERVER['REQUEST_METHOD'];
 
 // TODO: Get the request body for POST and PUT requests
-
+$rawInput = file_get_contents('php://input');
+$data = json_decode($rawInput, true);
+if (!is_array($data)) {
+    $data = [];
+}
 
 // TODO: Parse query parameters
+$queryParams = $_GET;
 
 
 
@@ -95,31 +105,53 @@
  */
 function getAllAssignments($db) {
     // TODO: Start building the SQL query
-    
+    $sql = "SELECT * FROM assignments WHERE 1=1";
+    $params = [];
     
     // TODO: Check if 'search' query parameter exists in $_GET
-    
+    if (isset($_GET['search']) && $_GET['search'] !== '') {
+        $sql .= " AND (title LIKE :search OR description LIKE :search)";
+        $params[':search'] = '%' . $_GET['search'] . '%';
+    }
+
     
     // TODO: Check if 'sort' and 'order' query parameters exist
-    
+    $sort = 'created_at';
+    $order = 'asc';
+
+    if (isset($_GET['sort']) && validateAllowedValue($_GET['sort'], ['title', 'due_date,', 'created_at'])) {
+        $sort = $_GET['sort'];
+    }
+
+    if (isset($_GET['order']) && validateAllowedValue(strtolower($_GET['order']), ['asc', 'desc'])) {
+        $order = strtolower($_GET['order']);
+    }
+
+    $sql .= " ORDER BY {$sort} {$order}";
     
     // TODO: Prepare the SQL statement using $db->prepare()
-    
+    $stmt = $db->prepare($sql);
     
     // TODO: Bind parameters if search is used
-    
+    foreach ($params as $key => $value) {
+        $stmt->bindValue($key, $value, PDO::PARAM_STR);
+    }
     
     // TODO: Execute the prepared statement
-    
+    $stmt->execute();
     
     // TODO: Fetch all results as associative array
-    
+    $assignments = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
     // TODO: For each assignment, decode the 'files' field from JSON to array
-    
+    foreach ($assignments as &$assignment) {
+        if (isset($assignment['files']) && $assignment['files'] !== null && $assignment['files'] !== '') {
+            $assignment['files'] = json_decode($assignment['files'], true);
+        }
+    }
     
     // TODO: Return JSON response
-    
+    sendResponse($assignments, 200);
 }
 
 
