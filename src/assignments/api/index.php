@@ -141,13 +141,15 @@ function getAllAssignments($db) {
     $stmt->execute();
     
     // TODO: Fetch all results as associative array
-    $assignments = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
     // TODO: For each assignment, decode the 'files' field from JSON to array
-    foreach ($assignments as &$assignment) {
-        if (isset($assignment['files']) && $assignment['files'] !== null && $assignment['files'] !== '') {
-            $assignment['files'] = json_decode($assignment['files'], true);
+    $assignments = [];
+    foreach ($rows as $row) {
+        if (isset($row['files']) && $row['files'] !== null && $row['files'] !== '') {
+            $row['files'] = json_decode($row['files'], true);
         }
+        $assignments[] = $row;
     }
     
     // TODO: Return JSON response
