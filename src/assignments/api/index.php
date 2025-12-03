@@ -222,6 +222,7 @@ function createAssignment($db, $data) {
         sendResponse(['error' => 'Invalid due_date format (expected YYYY-MM-DD)'], 400);
     }
     // TODO: Generate a unique assignment ID
+    $newId = $db->lastInsertId();
     
     // TODO: Handle the 'files' field
     $filesJson = null;
@@ -245,7 +246,6 @@ function createAssignment($db, $data) {
         // TODO: If insert failed, return 500 error
         sendResponse(['error' => 'Failed to create assignment'], 500);
     }
-    $newId = $db->lastInsertId();
     $createdAssignment = [
         'id'          => $newId,
         'title'       => $title,
@@ -275,40 +275,72 @@ function createAssignment($db, $data) {
  */
 function updateAssignment($db, $data) {
     // TODO: Validate that 'id' is provided in $data
-    
+    if (!isset($data['id'])) {
+        sendResponse(['error' => 'Assignment ID (id) is required'], 400);
+    }
     
     // TODO: Store assignment ID in variable
-    
+    $id = $data['id'];
     
     // TODO: Check if assignment exists
-    
+    $checkStmt = $db->prepare("SELECT id FROM assignments WHERE id = :id");
+    $checkStmt->bindValue(':id', $id);
+    $checkStmt->execute();
+    if (!$checkStmt->fetch(PDO::FETCH_ASSOC)) {
+        sendResponse(['error' => 'Assignment not found'], 404);
+    }
     
     // TODO: Build UPDATE query dynamically based on provided fields
-    
+    $setParts = [];
+    $params = [':id' => $id];
     
     // TODO: Check which fields are provided and add to SET clause
-    
+    if (array_key_exists('title', $data)) {
+        $setParts[] = "title = :title";
+        $params[':title'] = $data['title'];
+    }
+    if (array_key_exists('description', $data)) {
+        $setParts[] = "description = :description";
+        $params[':description'] = $data['description'];
+    }
+    if (array_key_exists('due_date', $data)) {
+        $setParts[] = "due_date = :due_date";
+        $params[':due_date'] = $data['due_date'];
+    }
+    if (array_key_exists('files', $data)) {
+        $setParts[] = "files = :files";
+        $params[':files'] = json_encode($data['files']);
+    }
     
     // TODO: If no fields to update (besides updated_at), return 400 error
-    
-    
+    if (empty($setParts)) {
+        sendResponse(['error' => 'No fields provided to update'], 400);
+    }
+
     // TODO: Complete the UPDATE query
-    
+    $setClause = implode(', ', $setParts) . ', updated_at = NOW()';
+    $sql = "UPDATE assignments SET {$setClause} WHERE id = :id";
     
     // TODO: Prepare the statement
-    
+    $stmt = $db->prepare($sql);
     
     // TODO: Bind all parameters dynamically
-    
+    foreach ($params as $key => $value) {
+        $stmt->bindValue($key, $value);
+    }
     
     // TODO: Execute the statement
-    
+    $stmt->execute();
     
     // TODO: Check if update was successful
-    
+    $rows = $stmt->rowCount();
     
     // TODO: If no rows affected, return appropriate message
-    
+    if ($rows === 0) {
+        sendResponse(['message' => 'No changes made'], 200);
+    }
+
+    sendResponse(['message' => 'Assignment updated successfully'], 200);
 }
 
 
