@@ -141,15 +141,11 @@ function getAllAssignments($db) {
     $stmt->execute();
     
     // TODO: Fetch all results as associative array
-    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $$assignments = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
     // TODO: For each assignment, decode the 'files' field from JSON to array
-    $assignments = [];
-    foreach ($rows as $row) {
-        if (isset($row['files']) && $row['files'] !== null && $row['files'] !== '') {
-            $row['files'] = json_decode($row['files'], true);
-        }
-        $assignments[] = $row;
+    foreach ($assignments as $i => $row) {
+        $assignments[$i]['files'] = json_decode($row['files'], true);
     }
     
     // TODO: Return JSON response
@@ -166,31 +162,36 @@ function getAllAssignments($db) {
  *   - id: The assignment ID (required)
  * 
  * Response: JSON object with assignment details
- */
+*/
 function getAssignmentById($db, $assignmentId) {
     // TODO: Validate that $assignmentId is provided and not empty
-    
+    if (empty($assignmentId)) {
+        sendResponse(['error' => 'Assignment ID is required'], 400);
+    }
     
     // TODO: Prepare SQL query to select assignment by id
-    
+    $sql = "SELECT * FROM assignments WHERE id = :id";
+    $stmt = $db->prepare($sql);
     
     // TODO: Bind the :id parameter
-    
+    $stmt->bindValue(':id', $assignmentId, PDO::PARAM_INT);
     
     // TODO: Execute the statement
-    
+    $stmt->execute();
     
     // TODO: Fetch the result as associative array
-    
+    $assignment = $stmt->fetch(PDO::FETCH_ASSOC);
     
     // TODO: Check if assignment was found
-    
+    if (!$assignment) {
+        sendResponse(['error' => 'Assignment not found'], 404);
+    }
     
     // TODO: Decode the 'files' field from JSON to array
-    
+   $assignment['files'] = json_decode($assignment['files'], true);
     
     // TODO: Return success response with assignment data
-    
+    sendResponse($assignment, 200);
 }
 
 
@@ -210,24 +211,17 @@ function getAssignmentById($db, $assignmentId) {
 function createAssignment($db, $data) {
     // TODO: Validate required fields
     
-    
     // TODO: Sanitize input data
-    
     
     // TODO: Validate due_date format
     
-    
     // TODO: Generate a unique assignment ID
-    
     
     // TODO: Handle the 'files' field
     
-    
     // TODO: Prepare INSERT query
     
-    
     // TODO: Bind all parameters
-    
     
     // TODO: Execute the statement
     
