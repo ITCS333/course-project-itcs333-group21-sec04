@@ -210,26 +210,51 @@ function getAssignmentById($db, $assignmentId) {
  */
 function createAssignment($db, $data) {
     // TODO: Validate required fields
-    
+    if (!isset($data['title']) || !isset($data['description']) || !isset($data['due_date'])) {
+        sendResponse(['error' => 'title, description, and due_date are required'], 400);
+    }
     // TODO: Sanitize input data
-    
+    $title       = sanitizeInput($data['title']);
+    $description = sanitizeInput($data['description']);
+    $dueDate     = sanitizeInput($data['due_date']);
     // TODO: Validate due_date format
-    
+    if (!validateDate($dueDate)) {
+        sendResponse(['error' => 'Invalid due_date format (expected YYYY-MM-DD)'], 400);
+    }
     // TODO: Generate a unique assignment ID
     
     // TODO: Handle the 'files' field
-    
+    $filesJson = null;
+    if (isset($data['files'])) {
+        $filesJson = json_encode($data['files']);
+    }
     // TODO: Prepare INSERT query
-    
+    $sql = "INSERT INTO assignments (title, description, due_date, files, created_at, updated_at)
+            VALUES (:title, :description, :due_date, :files, NOW(), NOW())";
+    $stmt = $db->prepare($sql);
     // TODO: Bind all parameters
-    
+    $stmt->bindValue(':title', $title, PDO::PARAM_STR);
+    $stmt->bindValue(':description', $description, PDO::PARAM_STR);
+    $stmt->bindValue(':due_date', $dueDate, PDO::PARAM_STR);
+    $stmt->bindValue(':files', $filesJson, PDO::PARAM_STR);
     // TODO: Execute the statement
-    
+    $ok = $stmt->execute();
     
     // TODO: Check if insert was successful
-    
-    
-    // TODO: If insert failed, return 500 error
+    if (!$ok) {
+        // TODO: If insert failed, return 500 error
+        sendResponse(['error' => 'Failed to create assignment'], 500);
+    }
+    $newId = $db->lastInsertId();
+    $createdAssignment = [
+        'id'          => $newId,
+        'title'       => $title,
+        'description' => $description,
+        'due_date'    => $dueDate,
+        'files'       => $filesJson ? json_decode($filesJson, true) : null
+    ];
+
+    sendResponse($createdAssignment, 201);
     
 }
 
