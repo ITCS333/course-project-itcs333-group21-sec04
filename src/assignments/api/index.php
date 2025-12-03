@@ -356,28 +356,40 @@ function updateAssignment($db, $data) {
  */
 function deleteAssignment($db, $assignmentId) {
     // TODO: Validate that $assignmentId is provided and not empty
-    
+    if (!$assignmentId) {
+        sendResponse(['error' => 'Assignment ID is required'], 400);
+    }
     
     // TODO: Check if assignment exists
-    
+    $checkStmt = $db->prepare("SELECT id FROM assignments WHERE id = :id");
+    $checkStmt->bindValue(':id', $assignmentId);
+    $checkStmt->execute();
+    if (!$checkStmt->fetch(PDO::FETCH_ASSOC)) {
+        sendResponse(['error' => 'Assignment not found'], 404);
+    }
     
     // TODO: Delete associated comments first (due to foreign key constraint)
-    
-    
+    $delComments = $db->prepare("DELETE FROM comments WHERE assignment_id = :id");
+    $delComments->bindValue(':id', $assignmentId);
+    $delComments->execute();
+
     // TODO: Prepare DELETE query for assignment
-    
+    $stmt = $db->prepare("DELETE FROM assignments WHERE id = :id");
     
     // TODO: Bind the :id parameter
-    
+    $stmt->bindValue(':id', $assignmentId);
     
     // TODO: Execute the statement
-    
+    $stmt->execute();
     
     // TODO: Check if delete was successful
-    
+    if ($stmt->rowCount() === 0) {
     
     // TODO: If delete failed, return 500 error
-    
+     sendResponse(['error' => 'Failed to delete assignment'], 500);
+    }
+
+    sendResponse(['message' => 'Assignment deleted successfully'], 200);
 }
 
 
@@ -397,22 +409,24 @@ function deleteAssignment($db, $assignmentId) {
  */
 function getCommentsByAssignment($db, $assignmentId) {
     // TODO: Validate that $assignmentId is provided and not empty
-    
+    if (!$assignmentId) {
+        sendResponse(['error' => 'assignment_id is required'], 400);
+    }
     
     // TODO: Prepare SQL query to select all comments for the assignment
-    
+    $stmt = $db->prepare("SELECT * FROM comments WHERE assignment_id = :assignment_id ORDER BY created_at ASC");
     
     // TODO: Bind the :assignment_id parameter
-    
+    $stmt->bindValue(':assignment_id', $assignmentId);
     
     // TODO: Execute the statement
-    
+    $stmt->execute();
     
     // TODO: Fetch all results as associative array
-    
+    $comments = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
     // TODO: Return success response with comments data
-    
+    sendResponse($comments, 200);
 }
 
 
@@ -430,31 +444,54 @@ function getCommentsByAssignment($db, $assignmentId) {
  */
 function createComment($db, $data) {
     // TODO: Validate required fields
-    
+    if (!isset($data['assignment_id']) || !isset($data['author']) || !isset($data['text'])) {
+        sendResponse(['error' => 'assignment_id, author, and text are required'], 400);
+    }
     
     // TODO: Sanitize input data
-    
+    $assignmentId = sanitizeInput($data['assignment_id']);
+    $author       = sanitizeInput($data['author']);
+    $text         = sanitizeInput($data['text']);
     
     // TODO: Validate that text is not empty after trimming
-    
+    if (trim($text) === '') {
+        sendResponse(['error' => 'Comment text cannot be empty'], 400);
+    }
     
     // TODO: Verify that the assignment exists
-    
+    $checkStmt = $db->prepare("SELECT id FROM assignments WHERE id = :id");
+    $checkStmt->bindValue(':id', $assignmentId);
+    $checkStmt->execute();
+    if (!$checkStmt->fetch(PDO::FETCH_ASSOC)) {
+        sendResponse(['error' => 'Assignment not found'], 404);
+    }
     
     // TODO: Prepare INSERT query for comment
-    
+    $stmt = $db->prepare(
+        "INSERT INTO comments (assignment_id, author, text, created_at)
+         VALUES (:assignment_id, :author, :text, NOW())"
+    );
     
     // TODO: Bind all parameters
-    
+    $stmt->bindValue(':assignment_id', $assignmentId);
+    $stmt->bindValue(':author', $author);
+    $stmt->bindValue(':text', $text);
     
     // TODO: Execute the statement
-    
+    $stmt->execute();
     
     // TODO: Get the ID of the inserted comment
-    
+    $newId = $db->lastInsertId();
     
     // TODO: Return success response with created comment data
-    
+    $createdComment = [
+        'id'            => $newId,
+        'assignment_id' => $assignmentId,
+        'author'        => $author,
+        'text'          => $text
+    ];
+
+    sendResponse($createdComment, 201);
 }
 
 
@@ -470,25 +507,34 @@ function createComment($db, $data) {
  */
 function deleteComment($db, $commentId) {
     // TODO: Validate that $commentId is provided and not empty
-    
+    if (!$commentId) {
+        sendResponse(['error' => 'Comment ID is required'], 400);
+    }
     
     // TODO: Check if comment exists
-    
+    $checkStmt = $db->prepare("SELECT id FROM comments WHERE id = :id");
+    $checkStmt->bindValue(':id', $commentId);
+    $checkStmt->execute();
+    if (!$checkStmt->fetch(PDO::FETCH_ASSOC)) {
+        sendResponse(['error' => 'Comment not found'], 404);
+    }
     
     // TODO: Prepare DELETE query
-    
+     $stmt = $db->prepare("DELETE FROM comments WHERE id = :id");
     
     // TODO: Bind the :id parameter
-    
+    $stmt->bindValue(':id', $commentId);
     
     // TODO: Execute the statement
-    
+    $stmt->execute();
     
     // TODO: Check if delete was successful
-    
-    
     // TODO: If delete failed, return 500 error
-    
+    if ($stmt->rowCount() === 0) {
+        sendResponse(['error' => 'Failed to delete comment'], 500);
+    }
+    sendResponse(['message' => 'Comment deleted successfully'], 200);
+
 }
 
 
