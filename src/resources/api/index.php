@@ -4,8 +4,6 @@ header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
-
-// Preflight (CORS)
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
     exit;
@@ -23,11 +21,6 @@ $action      = $_GET['action'] ?? null;
 $id          = $_GET['id'] ?? null;
 $resourceId  = $_GET['resource_id'] ?? null;
 $commentId   = $_GET['comment_id'] ?? null;
-
-
-// ============================================================================
-// RESOURCE FUNCTIONS
-// ============================================================================
 
 function getAllResources($db) {
     $search = $_GET['search'] ?? null;
@@ -100,44 +93,32 @@ function createResource($db, $data) {
 
 function updateResource($db, $data) {
     if (empty($data['id'])) sendResponse(["success" => false, "message" => "ID required"], 400);
-
     $id = $data['id'];
-
-    // Check existence
     $check = $db->prepare("SELECT id FROM resources WHERE id = ?");
     $check->execute([$id]);
     if (!$check->fetch()) sendResponse(["success" => false, "message" => "Resource not found"], 404);
-
     $fields = [];
     $vals   = [];
-
     if (isset($data['title'])) {
         $fields[] = "title = ?";
         $vals[] = sanitizeInput($data['title']);
     }
-
     if (isset($data['description'])) {
         $fields[] = "description = ?";
         $vals[] = sanitizeInput($data['description']);
     }
-
     if (isset($data['link'])) {
         if (!validateUrl($data['link'])) sendResponse(["success" => false, "message" => "Invalid URL"], 400);
         $fields[] = "link = ?";
         $vals[] = sanitizeInput($data['link']);
     }
-
     if (!$fields) sendResponse(["success" => false, "message" => "Nothing to update"], 400);
-
     $vals[] = $id;
     $sql = "UPDATE resources SET " . implode(", ", $fields) . " WHERE id = ?";
-
     $stmt = $db->prepare($sql);
     $stmt->execute($vals);
-
     sendResponse(["success" => true, "message" => "Resource updated"]);
 }
-
 function deleteResource($db, $resourceId) {
     if (!is_numeric($resourceId)) sendResponse(["success" => false, "message" => "Invalid ID"], 400);
 
@@ -162,12 +143,6 @@ function deleteResource($db, $resourceId) {
         sendResponse(["success" => false, "message" => "Delete failed"], 500);
     }
 }
-
-
-// ============================================================================
-// COMMENT FUNCTIONS
-// ============================================================================
-
 function getCommentsByResourceId($db, $resourceId) {
     if (!is_numeric($resourceId)) sendResponse(["success" => false, "message" => "Invalid resource_id"], 400);
 
@@ -177,31 +152,24 @@ function getCommentsByResourceId($db, $resourceId) {
 
     sendResponse(["success" => true, "data" => $rows]);
 }
-
 function createComment($db, $data) {
     $req = validateRequiredFields($data, ['resource_id', 'author', 'text']);
     if (!$req['valid']) sendResponse(["success" => false, "missing" => $req['missing']], 400);
 
     if (!is_numeric($data['resource_id'])) sendResponse(["success" => false, "message" => "Invalid resource_id"], 400);
-
-    // Check resource exists
     $check = $db->prepare("SELECT id FROM resources WHERE id = ?");
     $check->execute([$data['resource_id']]);
     if (!$check->fetch()) sendResponse(["success" => false, "message" => "Resource not found"], 404);
-
     $author = sanitizeInput($data['author']);
     $text   = sanitizeInput($data['text']);
-
     $stmt = $db->prepare("INSERT INTO comments (resource_id, author, text) VALUES (?, ?, ?)");
     $ok = $stmt->execute([$data['resource_id'], $author, $text]);
-
     if ($ok) {
         sendResponse(["success" => true, "message" => "Comment added", "id" => $db->lastInsertId()], 201);
     }
 
     sendResponse(["success" => false, "message" => "DB insert failed"], 500);
 }
-
 function deleteComment($db, $commentId) {
     if (!is_numeric($commentId)) sendResponse(["success" => false, "message" => "Invalid ID"], 400);
 
@@ -214,12 +182,6 @@ function deleteComment($db, $commentId) {
 
     sendResponse(["success" => true, "message" => "Comment deleted"]);
 }
-
-
-// ============================================================================
-// MAIN ROUTER
-// ============================================================================
-
 if ($method === 'GET') {
 
     if ($action === 'comments' && $resourceId) {
@@ -255,11 +217,6 @@ if ($method === 'GET') {
 } else {
     sendResponse(["success" => false, "message" => "Method Not Allowed"], 405);
 }
-
-
-// ============================================================================
-// HELPER FUNCTIONS
-// ============================================================================
 
 function sendResponse($data, $statusCode = 200) {
     http_response_code($statusCode);
