@@ -1,39 +1,25 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Meta tags for charset and viewport -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- Page title -->
-    <title>Week Details</title>
-
-    <!-- Link to CSS framework or custom stylesheet -->
-    
+    <title>Week Details</title>    
     <link rel="stylesheet" href="styles.css">
     <script src="details.js" defer></script>
-
 </head>
 <body>
-    <!-- Header with main heading -->
     <header>
         <h1>Week 1: Introduction to HTML</h1>
     </header>
-
-    <!-- Main content area -->
     <main>
-        <!-- Section 1: Weekly Information -->
         <article>
             <p>Starts on: 2025-01-15</p>
-
             <h2>Description &amp; Notes</h2>
             <p>
                 In this week, we will cover the basics of HTML, including how to structure a simple web page,
                 use common tags like headings, paragraphs, links, and images, and understand the importance of
                 semantic HTML for accessibility and SEO.
             </p>
-
             <h2>Exercises &amp; Resources</h2>
             <ul>
                 <li><a href="#">Exercise 1 - Basic Tags</a></li>
@@ -42,35 +28,24 @@
                 <li><a href="#">Resource - HTML Semantic Elements</a></li>
             </ul>
         </article>
-
-        <!-- Section 2: Discussion Forum -->
         <section id="discussion-forum">
             <h2>Discussion</h2>
-
-            <!-- Subsection 2.1: Existing Comments -->
             <div class="comments">
-                <!-- Example Comment 1 -->
                 <article class="comment">
                     <p>I have a question about the <code>&lt;header&gt;</code> tag. When should I use it instead of a simple <code>&lt;div&gt;</code>?</p>
                     <footer>Posted by: John Doe</footer>
                 </article>
-
-                <!-- Example Comment 2 -->
                 <article class="comment">
                     <p>Are we going to cover forms and inputs in this week or in a later module?</p>
                     <footer>Posted by: Jane Smith</footer>
                 </article>
             </div>
-
-            <!-- Subsection 2.2: Add a Comment Form -->
             <form action="#" method="post">
                 <fieldset>
                     <legend>Ask a Question</legend>
-
                     <label for="new-comment">Your Comment:</label>
                     <br>
                     <textarea id="new-comment" name="new-comment" rows="4" cols="50" required></textarea>
-
                     <br><br>
                     <button type="submit">Post Comment</button>
                 </fieldset>
