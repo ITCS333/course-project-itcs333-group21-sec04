@@ -1,58 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Character Encoding -->
     <meta charset="UTF-8">
-
-    <!-- Responsive Viewport -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- Page Title -->
     <title>Manage Resources</title>
-
-    <!-- Stylesheet (replace with your own or a framework) -->
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
-    <!-- Header -->
     <header>
         <h1>Manage Course Resources</h1>
     </header>
-
-    <!-- Main Content -->
     <main>
-
-        <!-- Section 1: Add/Edit Resource Form -->
         <section id="resource-form-section">
             <h2>Add a New Resource</h2>
-
             <form id="resource-form" action="#">
                 <fieldset>
                     <legend>Resource Details</legend>
-
-                    <!-- Resource Title -->
                     <label for="resource-title">Resource Title:</label>
                     <input id="resource-title" type="text" required>
-
-                    <!-- Resource Description -->
                     <label for="resource-description">Resource Description:</label>
                     <textarea id="resource-description"></textarea>
-
-                    <!-- Resource Link -->
                     <label for="resource-link">Resource Link:</label>
                     <input id="resource-link" type="url" required>
-
-                    <!-- Add Button -->
                     <button id="add-resource" type="submit">Add Resource</button>
                 </fieldset>
             </form>
         </section>
-
-        <!-- Section 2: Resources List -->
         <section id="resources-list-section">
             <h2>Existing Resources</h2>
-
             <table id="resources-table">
                 <thead>
                     <tr>
@@ -61,41 +36,34 @@
                         <th>Actions</th>
                     </tr>
                 </thead>
-
                 <tbody>
-                    <!-- Dummy Row 1 -->
                     <tr>
                         <td>Chapter 1 Notes</td>
                         <td>PDF covering introduction and basic concepts.</td>
                         <td>
-                            <button class="edit-btn">Edit</button>
-                            <button class="delete-btn">Delete</button>
+                        <button class="edit-btn">Edit</button>
+                        <button class="delete-btn">Delete</button>
                         </td>
                     </tr>
-
-                    <!-- Dummy Row 2 -->
                     <tr>
                         <td>Introduction Video</td>
                         <td>Overview of course goals and structure.</td>
                         <td>
-                            <button class="edit-btn">Edit</button>
-                            <button class="delete-btn">Delete</button>
+                        <button class="edit-btn">Edit</button>
+                        <button class="delete-btn">Delete</button>
                         </td>
                     </tr>
-
-                    <!-- Dummy Row 3 -->
                     <tr>
                         <td>External Resource</td>
                         <td>Helpful tutorial on related topics.</td>
                         <td>
-                            <button class="edit-btn">Edit</button>
-                            <button class="delete-btn">Delete</button>
+                        <button class="edit-btn">Edit</button>
+                        <button class="delete-btn">Delete</button>
                         </td>
                     </tr>
                 </tbody>
             </table>
         </section>
-
     </main>
 </body>
 </html>
