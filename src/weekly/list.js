@@ -23,7 +23,7 @@ async function loadWeeks() {
     if (!response.ok) {
       throw new Error('Failed to load weeks.json');
     }
-    const weeks = await response.json(); // expected: array of week objects
+    const weeks = await response.json();
     listSection.innerHTML = '';
     weeks.forEach((week) => {
       const article = createWeekArticle(week);
