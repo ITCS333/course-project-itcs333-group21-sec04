@@ -5,8 +5,8 @@
 |  ID        | Name               | Task  |
 |-----------|--------------------|--------|
 | 202003628 | Mansoor Salman Mansoor | Task 1 |
-| 202100376  | Ali Mahmood Buali  | Task  |
-| 202008188  | Mahmood Abdulmajeed Alzaki| Task  |
-| 20196596  |  Mohammed Eid Zidan  | Task  |
+| 202100376  | Ali Mahmood Buali  | Task 4  |
+| 202008188  | Mahmood Abdulmajeed Alzaki| Task 2  |
+| 20196596  |  Mohammed Eid Zidan  | Task 3 |
 
 ## A link to your live, hosted application on Replit.
