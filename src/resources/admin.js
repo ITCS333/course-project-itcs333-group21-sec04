@@ -1,35 +1,17 @@
-/*
-  Requirement: Make the "Manage Resources" page interactive.
-*/
-
-// --- Global Data Store ---
 let resources = [];
-
-// --- Element Selections ---
 const resourceForm = document.querySelector("#resource-form");
 const resourcesTableBody = document.querySelector("#resources-tbody");
-
-// --- Functions ---
-
-/**
- * Creates a table row for a resource.
- * @param {Object} resource - { id, title, description, link }
- * @returns {HTMLTableRowElement}
- */
 function createResourceRow(resource) {
   const { id, title, description } = resource;
 
   const tr = document.createElement("tr");
 
-  // Title
   const titleTd = document.createElement("td");
   titleTd.textContent = title;
 
-  // Description
   const descTd = document.createElement("td");
   descTd.textContent = description;
-
-  // Actions
+  
   const actionsTd = document.createElement("td");
 
   const editBtn = document.createElement("button");
@@ -51,22 +33,14 @@ function createResourceRow(resource) {
 
   return tr;
 }
-
-/**
- * Renders all resources to the table
- */
 function renderTable() {
-  resourcesTableBody.innerHTML = ""; // Clear table
+  resourcesTableBody.innerHTML = ""; 
 
   resources.forEach((resource) => {
     const row = createResourceRow(resource);
     resourcesTableBody.appendChild(row);
   });
 }
-
-/**
- * Handles form submission: Adds a new resource
- */
 function handleAddResource(event) {
   event.preventDefault();
 
@@ -86,10 +60,6 @@ function handleAddResource(event) {
   renderTable();
   resourceForm.reset();
 }
-
-/**
- * Handles delete button clicks using event delegation
- */
 function handleTableClick(event) {
   const target = event.target;
 
@@ -101,10 +71,6 @@ function handleTableClick(event) {
     renderTable();
   }
 }
-
-/**
- * Loads JSON + initializes page
- */
 async function loadAndInitialize() {
   try {
     const response = await fetch("resources.json");
@@ -112,13 +78,10 @@ async function loadAndInitialize() {
 
     renderTable();
 
-    // Event listeners
     resourceForm.addEventListener("submit", handleAddResource);
     resourcesTableBody.addEventListener("click", handleTableClick);
   } catch (error) {
     console.error("Error loading resources.json:", error);
   }
 }
-
-// --- Initial Page Load ---
 loadAndInitialize();
