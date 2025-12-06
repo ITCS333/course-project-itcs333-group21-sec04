@@ -10,7 +10,7 @@ const newCommentText = document.getElementById('new-comment-text');
 function getWeekIdFromURL() {
   const queryString = window.location.search; // e.g. "?id=1"
   const params = new URLSearchParams(queryString);
-  const id = params.get('id'); // string or null
+  const id = params.get('id');
   return id;
 }
 function renderWeekDetails(week) {
