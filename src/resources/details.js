@@ -1,12 +1,6 @@
-/*
-  Requirement: Populate the resource detail page and discussion forum.
-*/
-
-// --- Global Data Store ---
 let currentResourceId = null;
 let currentComments = [];
 
-// --- Element Selections ---
 const resourceTitle = document.querySelector("#resource-title");
 const resourceDescription = document.querySelector("#resource-description");
 const resourceLink = document.querySelector("#resource-link");
@@ -14,28 +8,17 @@ const commentList = document.querySelector("#comment-list");
 const commentForm = document.querySelector("#comment-form");
 const newComment = document.querySelector("#new-comment");
 
-// --- Functions ---
-
-/**
- * Extract ?id=... from the URL
- */
 function getResourceIdFromURL() {
   const params = new URLSearchParams(window.location.search);
   return params.get("id");
 }
 
-/**
- * Render resource details in the DOM
- */
 function renderResourceDetails(resource) {
   resourceTitle.textContent = resource.title;
   resourceDescription.textContent = resource.description;
   resourceLink.href = resource.link;
 }
 
-/**
- * Create a comment <article> element
- */
 function createCommentArticle(comment) {
   const article = document.createElement("article");
   article.classList.add("comment");
@@ -51,22 +34,14 @@ function createCommentArticle(comment) {
 
   return article;
 }
-
-/**
- * Render all comments
- */
 function renderComments() {
-  commentList.innerHTML = ""; // Clear
+  commentList.innerHTML = ""; 
 
   currentComments.forEach((comment) => {
     const article = createCommentArticle(comment);
     commentList.appendChild(article);
   });
 }
-
-/**
- * Add new comment handler
- */
 function handleAddComment(event) {
   event.preventDefault();
 
@@ -84,11 +59,6 @@ function handleAddComment(event) {
 
   newComment.value = "";
 }
-
-/**
- * Initialize page:
- * Load JSON, find resource, render details + comments
- */
 async function initializePage() {
   currentResourceId = getResourceIdFromURL();
 
@@ -124,6 +94,4 @@ async function initializePage() {
     resourceTitle.textContent = "Error loading resource.";
   }
 }
-
-// --- Initial Page Load ---
 initializePage();
