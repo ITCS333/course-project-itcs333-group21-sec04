@@ -1,16 +1,7 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Weekly Breakdown</title>
-    <style>
-        body {
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8">    
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Weekly Breakdown</title>
     <script src="admin.js" defer></script>
@@ -81,11 +72,9 @@
     <main>
         <section>
             <h2>Add a New Week</h2>
-
             <form id="week-form" action="#" method="post">
                 <fieldset>
                     <legend>Weekly Details</legend>
-
                     <label for="week-title">Week Title</label>
                     <input
                         type="text"
@@ -119,7 +108,6 @@
         </section>
         <section>
             <h2>Current Weekly Breakdown</h2>
-
             <table id="weeks-table">
                 <thead>
                     <tr>
@@ -129,142 +117,7 @@
                     </tr>
                 </thead>
                 <tbody id="weeks-tbody">
->
-                    <!-- Dummy Row 1 -->
-                    <tr>
-                        <td>Week 1: Intro to HTML</td>
-                        <td>Basic HTML structure, headings, paragraphs, and links.</td>
-                        <td class="actions">
-                            <button type="button">Edit</button>
-                            <button type="button">Delete</button>
-                        </td>
-                    </tr>
 
-                    <!-- Dummy Row 2 -->
-                    <tr>
-                        <td>Week 2: CSS Basics</td>
-                        <td>Introduction to CSS selectors, colors, and basic layout.</td>
-                        <td class="actions">
-                            <button type="button">Edit</button>
-                            <button type="button">Delete</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </section>
-    </main>
-</body>
-</html>rial, sans-serif;
-            padding: 20px;
-        }
-        header h1 {
-            text-align: center;
-            margin-bottom: 25px;
-        }
-        main {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-        section {
-            margin-bottom: 30px;
-        }
-        form fieldset {
-            border: 1px solid #ccc;
-            padding: 15px;
-        }
-        form legend {
-            font-weight: bold;
-        }
-        label {
-            display: block;
-            margin-top: 10px;
-            margin-bottom: 4px;
-        }
-        input[type="text"],
-        input[type="date"],
-        textarea {
-            width: 100%;
-            padding: 6px;
-            box-sizing: border-box;
-        }
-        button {
-            margin-top: 15px;
-            padding: 8px 16px;
-            cursor: pointer;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        thead {
-            background-color: #f0f0f0;
-        }
-        th, td {
-            border: 1px solid #ccc;
-            padding: 8px;
-            vertical-align: top;
-        }
-        th {
-            text-align: left;
-        }
-        .actions button {
-            margin-right: 5px;
-        }
-    </style>
-</head>
-<body>
-    <header>
-        <h1>Manage Weekly Breakdown</h1>
-    </header>
-    <main>
-        <section>
-            <h2>Add a New Week</h2>
-            <form id="week-form" action="#" method="post">
-                <fieldset>
-                    <legend>Weekly Details</legend>
-                    <label for="week-title">Week Title</label>
-                    <input
-                        type="text"
-                        id="week-title"
-                        name="week-title"
-                        placeholder="Week 1: Introduction to HTML"
-                        required
-                    >
-                    <label for="week-start-date">Start Date</label>
-                    <input
-                        type="date"
-                        id="week-start-date"
-                        name="week-start-date"
-                        required
-                    >
-                    <label for="week-description">Description &amp; Notes</label>
-                    <textarea
-                        id="week-description"
-                        name="week-description"
-                        rows="5"
-                    ></textarea>
-                    <label for="week-links">Exercise / Resource Links (one per line)</label>
-                    <textarea
-                        id="week-links"
-                        name="week-links"
-                        rows="3"
-                    ></textarea>
-                    <button id="add-week" type="submit">Add Week</button>
-                </fieldset>
-            </form>
-        </section>
-        <section>
-            <h2>Current Weekly Breakdown</h2>
-
-            <table id="weeks-table">
-                <thead>
-                    <tr>
-                        <th>Week Title</th>
-                        <th>Description</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
                     <tr>
                         <td>Week 1: Intro to HTML</td>
                         <td>Basic HTML structure, headings, paragraphs, and links.</td>
