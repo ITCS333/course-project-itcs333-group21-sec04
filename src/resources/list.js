@@ -1,15 +1,5 @@
-/*
-  Requirement: Populate the "Course Resources" list page.
-*/
-
-// --- Element Selections ---
 const listSection = document.querySelector("#resource-list-section");
 
-// --- Functions ---
-
-/**
- * Creates an <article> representing a resource
- */
 function createResourceArticle(resource) {
   const { id, title, description } = resource;
 
@@ -32,10 +22,6 @@ function createResourceArticle(resource) {
 
   return article;
 }
-
-/**
- * Loads and renders all resources
- */
 async function loadResources() {
   try {
     const response = await fetch("resources.json");
@@ -53,6 +39,4 @@ async function loadResources() {
     listSection.innerHTML = "<p>Error loading resources.</p>";
   }
 }
-
-// --- Initial Page Load ---
 loadResources();
