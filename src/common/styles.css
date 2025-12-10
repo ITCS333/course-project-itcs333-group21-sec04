@@ -1,1 +1,165 @@
-/* CSS Styles */
+/* Basic page layout */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #eff1f1;
+}
+
+header {
+  background-color: #b1d6f5;
+  padding: 16px;
+  border-bottom: 1px solid #ddd;
+}
+
+header h1 {
+  margin: 0;
+}
+
+/* Main container */
+main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Sections & Articles */
+section {
+  margin-bottom: 32px;
+}
+
+article {
+  background-color: #ffffff;
+  padding: 16px;
+  margin-bottom: 16px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+/* Headings */
+h1,
+h2 {
+  color: #333;
+}
+
+h2 {
+  margin-top: 0;
+}
+
+/* Links */
+a {
+  color: #0066cc;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Forms (admin form + comment form) */
+form {
+  max-width: 600px;
+}
+
+fieldset {
+  border: 1px solid #ccc;
+  padding: 16px;
+  border-radius: 4px;
+}
+
+legend {
+  font-weight: bold;
+}
+
+label {
+  display: block;
+  margin-top: 12px;
+}
+
+input[type="text"],
+input[type="date"],
+textarea {
+  width: 100%;
+  padding: 6px;
+  margin-top: 4px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  font-family: inherit;
+  font-size: 14px;
+}
+
+button {
+  margin-top: 16px;
+  padding: 8px 12px;
+  border: 1px solid #888;
+  border-radius: 3px;
+  background-color: #e0e0e0;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #d0d0d0;
+}
+
+/* Assignments list table (admin page) */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 16px;
+}
+
+th,
+td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: left;
+}
+
+th {
+  background-color: #eee;
+}
+
+/* Action buttons inside table */
+td button {
+  margin-right: 6px;
+}
+
+/* Assignment files list (details page) */
+#assignment-files-list {
+  padding-left: 20px;
+}
+
+#assignment-files-list li {
+  margin-bottom: 4px;
+}
+
+/* Discussion comments (details page) */
+#comment-list article {
+  margin-bottom: 12px;
+}
+
+#comment-list p {
+  margin: 0 0 6px 0;
+}
+
+#comment-list footer {
+  font-size: 12px;
+  color: #666;
+}
+
+/* Small screen tweaks */
+@media (max-width: 600px) {
+  main {
+    padding: 12px;
+  }
+
+  fieldset {
+    padding: 12px;
+  }
+
+  th,
+  td {
+    font-size: 14px;
+  }
+}
