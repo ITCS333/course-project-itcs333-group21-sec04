@@ -91,8 +91,8 @@ function createAssignment($db, $data) {
     }
     $title       = sanitizeInput($data['title']);
     $description = sanitizeInput($data['description']);
-    $dueDate     = sanitizeInput($data['due_date']);
-    if (!validateDate($dueDate)) {
+    $due_date     = sanitizeInput($data['due_date']);
+    if (!validateDate($due_date)) {
         sendResponse(['error' => 'Invalid due_date format (expected YYYY-MM-DD)'], 400);
     }
     $filesJson = null;
@@ -104,7 +104,7 @@ function createAssignment($db, $data) {
     $stmt = $db->prepare($sql);
     $stmt->bindValue(':title', $title, PDO::PARAM_STR);
     $stmt->bindValue(':description', $description, PDO::PARAM_STR);
-    $stmt->bindValue(':due_date', $dueDate, PDO::PARAM_STR);
+    $stmt->bindValue(':due_date', $due_date, PDO::PARAM_STR);
     $stmt->bindValue(':files', $filesJson, PDO::PARAM_STR);
     $ok = $stmt->execute();
     $newId = $db->lastInsertId();
@@ -115,7 +115,7 @@ function createAssignment($db, $data) {
         'id'          => $newId,
         'title'       => $title,
         'description' => $description,
-        'due_date'    => $dueDate,
+        'due_date'    => $due_date,
         'files'       => $filesJson ? json_decode($filesJson, true) : null
     ];
 

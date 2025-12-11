@@ -2,7 +2,7 @@ let currentAssignmentId = null;
 let currentComments = [];
 
 const assignmentTitle = document.querySelector("#assignment-title");
-const assignmentDueDate = document.querySelector("#assignment-due-date");
+const assignmentdue_date = document.querySelector("#assignment-due-date");
 const assignmentDescription = document.querySelector("#assignment-description");
 const assignmentFilesList = document.querySelector("#assignment-files-list");
 const commentList = document.querySelector("#comment-list");
@@ -16,7 +16,7 @@ function getAssignmentIdFromURL() {
 
 function renderAssignmentDetails(assignment) {
   assignmentTitle.textContent = assignment.title;
-  assignmentDueDate.textContent = "Due: " + assignment.dueDate;
+  assignmentdue_date.textContent = "Due: " + assignment.due_date;
   assignmentDescription.textContent = assignment.description;
 
   assignmentFilesList.innerHTML = "";
@@ -54,7 +54,7 @@ function renderComments() {
   });
 }
 
-function handleAddComment(event) {
+async function handleAddComment(event) {
   event.preventDefault();
 
   const text = newCommentText.value.trim();
@@ -65,7 +65,17 @@ function handleAddComment(event) {
     text: text,
   };
 
-  currentComments.push(newComment);
+  const res = await fetch("api/index.php?resource=comments", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      assignment_id: currentAssignmentId,
+      author: "Student",
+      text: text,
+    }),
+  });
+  const saved = await res.json();
+  currentComments.push(saved);
   renderComments();
   newCommentText.value = "";
 }
@@ -78,8 +88,12 @@ async function initializePage() {
     return;
   }
 
-  const assignmentsRes = await fetch("api/assignments.json");
-  const commentsRes = await fetch("api/comments.json");
+  const assignmentsRes = await fetch(
+    "api/index.php?resource=assignments&id={currentAssignmentId}"
+  );
+  const commentsRes = await fetch(
+    "api/index.php?resource=comments&assignment_id={currentAssignmentId}"
+  );
 
   const assignmentsData = await assignmentsRes.json();
   const commentsData = await commentsRes.json();

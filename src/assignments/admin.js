@@ -1,12 +1,14 @@
 document.addEventListener("DOMContentLoaded", () => {
+  console.log("admin.js loading");
   let assignments = [];
   const assignmentForm = document.querySelector("#assignment-form");
   const assignmentsTableBody = document.querySelector("#assignments-tbody");
+  console.log("tbody =", assignmentsTableBody);
   function createAssignmentRow(assignment) {
     const tr = document.createElement("tr");
     tr.innerHTML = `
     <td>${assignment.title}</td>
-    <td>${assignment.dueDate}</td>
+    <td>${assignment.due_date}</td>
     <td>
     <button class="edit-btn" data-id="${assignment.id}">Edit</button>
     <button class="delete-btn" data-id="${assignment.id}">Delete</button>
@@ -23,40 +25,58 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  function handleAddAssignment(event) {
+  async function handleAddAssignment(event) {
     event.preventDefault();
 
     const title = document.querySelector("#assignment-title").value.trim();
     const description = document
       .querySelector("#assignment-description")
       .value.trim();
-    const dueDate = document.querySelector("#assignment-due-date").value;
+    const due_date = document.querySelector("#assignment-due-date").value;
     const files = document.querySelector("#assignment-files").value.trim();
 
     const newAssignment = {
       id: `asg_${Date.now()}`,
       title,
       description,
-      dueDate,
+      due_date,
       files,
     };
 
-    assignments.push(newAssignment);
+    const res = await fetch("api/index.php?resource=assignments", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        title,
+        description,
+        due_date: due_date,
+        files: files ? files.split(",").map((f) => f.trim()) : [],
+      }),
+    });
+
+    const created = await res.json();
+    assignments.push(created);
     renderTable();
     assignmentForm.reset();
   }
 
-  function handleTableClick(event) {
+  async function handleTableClick(event) {
     if (event.target.classList.contains("delete-btn")) {
       const id = event.target.getAttribute("data-id");
-      assignments = assignments.filter((a) => a.id !== id);
+      await fetch(`api/index.php?resource=assignments&id=${id}`, {
+        method: "DELETE",
+      });
+      await fetch(`api/index.php?resource=assignments&id=${id}`, {
+        method: "DELETE",
+      });
+      assignments = assignments.filter((a) => String(a.id) !== String(id));
       renderTable();
     }
   }
 
   async function loadAndInitialize() {
     try {
-      const res = await fetch("api/assignments.json");
+      const res = await fetch("api/index.php?resource=assignments");
       assignments = await res.json();
     } catch (e) {
       assignments = [];
