@@ -98,7 +98,7 @@ function handleTableClick(event) {
   }
 }
 
-/* ✅ التعديل هنا فقط */
+
 function handleSearch(event) {
   const term = event.target.value.toLowerCase();
 
