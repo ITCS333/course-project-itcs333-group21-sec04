@@ -1,14 +1,10 @@
-
 let students = [];
-
 
 const studentTableBody = document.querySelector("#student-table tbody");
 const addStudentForm = document.querySelector("#add-student-form");
 const changePasswordForm = document.querySelector("#password-form");
 const searchInput = document.querySelector("#search-input");
 const tableHeaders = document.querySelectorAll("#student-table thead th");
-
-
 
 function createStudentRow(student) {
   const tr = document.createElement("tr");
@@ -102,8 +98,9 @@ function handleTableClick(event) {
   }
 }
 
-function handleSearch() {
-  const term = searchInput.value.toLowerCase();
+/* ✅ التعديل هنا فقط */
+function handleSearch(event) {
+  const term = event.target.value.toLowerCase();
 
   if (!term) {
     renderTable(students);
