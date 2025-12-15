@@ -1,14 +1,14 @@
-// --- Global Data Store ---
+
 let students = [];
 
-// --- Element Selections ---
+
 const studentTableBody = document.querySelector("#student-table tbody");
 const addStudentForm = document.querySelector("#add-student-form");
 const changePasswordForm = document.querySelector("#password-form");
 const searchInput = document.querySelector("#search-input");
 const tableHeaders = document.querySelectorAll("#student-table thead th");
 
-// --- Functions ---
+
 
 function createStudentRow(student) {
   const tr = document.createElement("tr");
@@ -167,5 +167,4 @@ async function loadStudentsAndInitialize() {
   }
 }
 
-// --- Initial Page Load ---
 loadStudentsAndInitialize();
