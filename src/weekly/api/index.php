@@ -1,6 +1,13 @@
 <?php
 session_start();
 
+
+if (!isset($_SESSION['user'])) {
+    $_SESSION['user'] = [
+        'role' => 'guest'
+    ];
+}
+
 header("Content-Type: application/json");
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
@@ -13,9 +20,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 class Database {
     private $host = "localhost";
-    private $db_name = "your_database_name"; 
-    private $username = "your_db_user";     
-    private $password = "your_db_password";  
+    private $db_name = "your_database_name";
+    private $username = "your_db_user";
+    private $password = "your_db_password";
     private $conn;
 
     public function getConnection() {
@@ -93,7 +100,7 @@ function getWeekById($db, $id) {
     if (!$id) sendError("Missing week_id");
 
     $stmt = $db->prepare(
-        "SELECT week_id, title, start_date, description, links, created_at 
+        "SELECT week_id, title, start_date, description, links, created_at
          FROM weeks WHERE week_id = ?"
     );
     $stmt->execute([$id]);
