@@ -141,10 +141,15 @@ function deleteResource($db, $resourceId) {
         $db->commit();
 
         sendResponse(["success" => true, "message" => "Resource & comments deleted"]);
-    } catch (Exception $e) {
-        $db->rollBack();
-        sendResponse(["success" => false, "message" => "Delete failed"], 500);
-    }
+
+    } catch (PDOException $e) {
+    $db->rollBack();
+    sendResponse([
+        "success" => false,
+        "message" => "Delete failed"
+    ], 500);
+}
+
 }
 function getCommentsByResourceId($db, $resourceId) {
     if (!is_numeric($resourceId)) sendResponse(["success" => false, "message" => "Invalid resource_id"], 400);
